@@ -37,3 +37,49 @@ const httpInterceptor = {
 //添加拦截器
 uni.addInterceptor('request', httpInterceptor)
 uni.addInterceptor('uploadFile', httpInterceptor)
+// 添加类型，支持泛型
+interface Data<T> {
+  code: string
+  msg: string
+  resulte: T
+}
+// 2.2 添加类型，支持泛型
+/**
+ * 请求函数
+ * @param options
+ * @return Promise
+ */
+
+export const http = <T>(options: UniApp.RequestOptions) => {
+  return new Promise<Data<T>>((resolve, reject) => {
+    uni.request({
+      ...options,
+      //响应成功
+      success(res) {
+        //状态码 2xx ,数据才有
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(res.data as Data<T>)
+        } else if (res.statusCode === 401) {
+          //401 错误,清理用户信息,跳转登录页
+          const memberStore = useMemberStore()
+          memberStore.clearProfile()
+          uni.navigateTo({ url: '/pages/login/login' })
+          reject(res)
+        } else {
+          //其他错误
+          uni.showToast({
+            icon: 'none',
+            title: (res.data as Data<T>).msg || '请求错误',
+          })
+        }
+      },
+      fail(err) {
+        uni.showToast({
+          icon: 'none',
+          title: '网络错误,换个网络试试',
+        })
+        reject(err)
+      },
+    })
+  })
+}
