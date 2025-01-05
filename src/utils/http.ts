@@ -12,7 +12,7 @@
 
 import { useMemberStore } from '@/stores'
 
-const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+const baseURL = 'https://pcapi-xiaotuxian-front.itheima.net'
 // 添加拦截器
 const httpInterceptor = {
   //拦截前触发
@@ -31,7 +31,6 @@ const httpInterceptor = {
     if (token) {
       options.header.Authorization = token
     }
-    console.log(options)
   },
 }
 //添加拦截器
@@ -41,7 +40,7 @@ uni.addInterceptor('uploadFile', httpInterceptor)
 interface Data<T> {
   code: string
   msg: string
-  resulte: T
+  result: T
 }
 // 2.2 添加类型，支持泛型
 /**
