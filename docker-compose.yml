@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  xiaotuxian-app:
+    container_name: xiaotuxian-eap
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xiaotuxian-eap:v1.0.0 # git    
+    ports:
+      - 3011:80       
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai 
